@@ -14,10 +14,6 @@
 아이폰 사파리 브라우져에서 사진을 Canvas Element 에서 그리게 되면<br/>
 회전된 방향으로 그려지게 된다. chrome 은 정방향으로 그려진다.<br/>
 
-## 참고
-https://www.media.mit.edu/pia/Research/deepview/exif.html
-
-https://exiv2.org/tags.html
 
 ## m1.jpg Binary
 ![result()](m1.jpg)
@@ -54,3 +50,9 @@ d4 06 00 00
 00 00 00 01 00 00 00 00 00 1f 00 09 00 00 00 01 00 00 00 00 00 25 00 09 00 00 00 01 00 00 00 00 00 26 00 09 00 00 00 01 00 00 00 00 00 27 00 0a
 ```
 ------------------------------------------------------------------
+
+## 참고
+https://www.media.mit.edu/pia/Research/deepview/exif.html
+
+https://exiv2.org/tags.html
+
