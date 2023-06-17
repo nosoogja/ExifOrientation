@@ -21,7 +21,8 @@
 -- m1.jpg 파일 처음 1000 bytes
 ff d8 ff e0 00 10 4a 46 49 46 00 01 01 01 00 60 00 60 00 00     // (20 bytes)
 ff e1 09 aa 45 78 69 66 00 00                                   // (10 bytes)
-49 49 2a 00 08 00 00 00 0d 00                                   // (10 bytes) offset to data stored address 가 이곳부터 시작인듯.
+49 49 2a 00 08 00 00 00                                         // (8 bytes) offset to data stored address 가 이곳부터 시작인듯.
+0d 00                                                           // 0x000d 13 tags
 0b 00 02 00 22 00 00 00 aa 00 00 00     // ProcessingSoftware
 00 01 04 00 01 00 00 00 0a 00 00 00     // ImageWidth
 01 01 04 00 01 00 00 00 08 00 00 00     // ImageLength

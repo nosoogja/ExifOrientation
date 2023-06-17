@@ -20,35 +20,66 @@ function bytesIndexOf(arr, sep){
     return -1
 }
 
+function cvtArrayToUint(arr){
+    var num = 0
+    for(var i=arr.length-1; i>=0; i--){
+        num += arr[i] * (256**i)
+    }
+
+    return num
+}
+
 function getPhotoOrientation(bbb)  {
 	var orien = -1
-    var bb = bbb.slice(0, 2**16)
-	if(bb[0] != 0xff || bb[1] != 0xd8 || bb[3] == 0xe0 ){
+    var offset = 0
+
+	if(bbb[0] != 0xff || bbb[1] != 0xd8 ){
+		return -1
+	}
+    
+    if(bbb[3] == 0xe0 ){
+        offset += 18    
+    }
+
+	if( !(bbb[offset+12] == 0x49 || bbb[offset+12] == 0x4d) ){
 		return -1
 	}
 
-	if( !(bb[12] == 0x49 || bb[12] == 0x4d) ){
-		return -1
-	}
+    var bigEdian = true
+	//! byte align 확인
+    if(bbb[offset+15] == 0x2a ){
+        bigEdian = true
+	} else if( bbb[offset+14] == 0x2a ){
+        bigEdian = false
+    }else{
+        return -1
+    }
+
+    offset += 22
 
 	var idx = 0
     var oriIdx = -1
-	//! byte align 확인
-	if(bb[15] == 0x2a ){
-		idx = bytesIndexOf(bb, [0x01, 0x12, 0x00, 0x03, 0x00, 0x00, 0x00, 0x01])
-		orien = bb[idx+9]
+
+	if(bigEdian ){
+        var tnum = cvtArrayToUint([bbb[offset-1], bbb[offset-2]])
+        var bb = bbb.slice(offset, offset + 12*tnum)
+
+        idx = bytesIndexOf(bb, [0x01, 0x12, 0x00, 0x03, 0x00, 0x00, 0x00, 0x01])
         oriIdx = idx+9
-	} else if( bb[14] == 0x2a ){
-		//! 12 01 03 00 01 00 00 00 01 00 00 00     // Orientation
-		idx = bytesIndexOf(bb, [0x12, 0x01, 0x03, 0x00, 0x01, 0x00, 0x00, 0x00])
-		orien = bb[idx+8]
-        oriIdx = idx+8
+		orien = bb[oriIdx]
 
 	} else {
-		return -1
-	}
+		//! 12 01 03 00 01 00 00 00 01 00 00 00     // Orientation
+        var tnum = cvtArrayToUint([bbb[offset-2], bbb[offset-1]])
+        var bb = bbb.slice(offset, offset + 12*tnum)
 
-	if(idx < 0 || idx > 0xffff || orien < 1 || orien > 8){
+        idx = bytesIndexOf(bb, [0x12, 0x01, 0x03, 0x00, 0x01, 0x00, 0x00, 0x00])
+        oriIdx = idx+8
+		orien = bb[oriIdx]
+
+	} 
+
+	if(idx < 0 || orien < 1 || orien > 8){
 		return -1
 	}
 
