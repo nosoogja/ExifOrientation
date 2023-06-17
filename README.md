@@ -16,6 +16,7 @@
 
 ## 참고
 https://www.media.mit.edu/pia/Research/deepview/exif.html
+
 https://exiv2.org/tags.html
 
 ## m1.jpg Binary
