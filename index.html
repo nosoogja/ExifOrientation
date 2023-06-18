@@ -45,12 +45,12 @@ function getPhotoOrientation(bbb)  {
 		return -1
 	}
 
-    var bigEdian = true
+    var bigEndian = true
 	//! byte align 확인
     if(bbb[offset+15] == 0x2a ){
-        bigEdian = true
+        bigEndian = true
 	} else if( bbb[offset+14] == 0x2a ){
-        bigEdian = false
+        bigEndian = false
     }else{
         return -1
     }
@@ -60,7 +60,7 @@ function getPhotoOrientation(bbb)  {
 	var idx = 0
     var oriIdx = -1
 
-	if(bigEdian ){
+	if(bigEndian ){
         var tnum = cvtArrayToUint([bbb[offset-1], bbb[offset-2]])
         var bb = bbb.slice(offset, offset + 12*tnum)
 
