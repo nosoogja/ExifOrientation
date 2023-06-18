@@ -57,29 +57,27 @@ function getPhotoOrientation(bbb)  {
 
     offset += 22
 
-	var idx = 0
+	var idx = -1
     var oriIdx = -1
 
-	if(bigEndian ){
-        var tnum = cvtArrayToUint([bbb[offset-1], bbb[offset-2]])
-        var bb = bbb.slice(offset, offset + 12*tnum)
+    var tnum = new DataView(bbb.slice(offset-2, offset).buffer).getUint16(0, !bigEndian)
+    var bb = bbb.slice(offset, offset + 12*tnum)
 
+    if(bigEndian ){
         idx = bytesIndexOf(bb, [0x01, 0x12, 0x00, 0x03, 0x00, 0x00, 0x00, 0x01])
-        oriIdx = idx+9
-		orien = bb[oriIdx]
-
 	} else {
 		//! 12 01 03 00 01 00 00 00 01 00 00 00     // Orientation
-        var tnum = cvtArrayToUint([bbb[offset-2], bbb[offset-1]])
-        var bb = bbb.slice(offset, offset + 12*tnum)
-
         idx = bytesIndexOf(bb, [0x12, 0x01, 0x03, 0x00, 0x01, 0x00, 0x00, 0x00])
-        oriIdx = idx+8
-		orien = bb[oriIdx]
-
 	} 
 
-	if(idx < 0 || orien < 1 || orien > 8){
+    if(idx < 0){
+        return -1
+    }
+
+    orien = new DataView(bb.slice(idx+8, idx+10).buffer).getUint16(0, !bigEndian)
+    // log("---------orien-", tnum, orien, bb.slice(idx+8, idx+10))
+
+	if(orien < 1 || orien > 8){
 		return -1
 	}
 
