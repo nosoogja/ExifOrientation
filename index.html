@@ -3,7 +3,7 @@ function bytesIndexOf(arr, sep){
     if(sep.length > arr.length){
         return -1
     }
-    var end = arr.length - sep.length
+    var end = arr.length - (sep.length-1)
     var ok = true
     for(var i=0; i<end; i++){
         ok = true   
